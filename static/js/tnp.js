@@ -15,10 +15,28 @@
 *   You should have received a copy of the GNU General Public License
 *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var unseenNotices = 0;
 var noticBoardURL = 'http://tp.iitkgp.ernet.in/notice/';
 var noticeBaseURL = 'http://tp.iitkgp.ernet.in/notice/notice.php?sr_no='
-var noticeDuration = 3000;
+var noticeDuration = 3500;
+
+function getNoticeCount(){
+    return Number(localStorage.getItem('unseenNotices'));
+}
+
+function setNoticeCount(){
+    chrome.browserAction.setBadgeText({text:getNoticeCount()});
+}
+
+function incrementNoticeCount(){
+    unseenNotices = getNoticeCount();
+    unseenNotices += 1;
+}
+
+function clearNoticeCount(){
+    localStorage.setItem('unseenNotices', '');
+    setNoticeCount();
+}
+
 
 function notifier(notice, notify){
     /*
@@ -27,8 +45,7 @@ function notifier(notice, notify){
     localStorage.setItem(notice['id'], JSON.stringify(notice));
 
     if (notify){
-        unseenNotices += 1;
-
+        incrementNoticeCount();
         notification = window.webkitNotifications.createNotification(
             'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
 
@@ -44,18 +61,7 @@ function notifier(notice, notify){
         window.setTimeout(function(){
             notification.cancel();
         }, noticeDuration);
-
-        setNoticeCount();
     }
-}
-
-function setNoticeCount(){
-    chrome.browserAction.setBadgeText({text:unseenNotices?unseenNotices.toString():''});
-}
-
-function clearNoticeCount(){
-    unseenNotices = 0;
-    setNoticeCount();
 }
 
 function checkNotices(notifyFunction, displayFunction){
