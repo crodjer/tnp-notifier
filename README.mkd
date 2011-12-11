@@ -11,3 +11,9 @@ License: GPLv3
 
 Alert Sound: http://soundbible.com/1598-Electronic-Chime.html
     (CC Attribution License)
+
+Contributing: Bug Reports and Patches are most welcome
+
+Possible Improvements:
+ - Allow for search in the notices
+ - Make it generic for all intern notice boards
