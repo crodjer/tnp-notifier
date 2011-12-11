@@ -1,0 +1,13 @@
+Chrome Notifications Extension for Training and Placements Cell, Internal
+Notice Board.
+
+Provides:
+
+ -  Update Notifications on new notices
+ -  Count of unread notices
+ -  Display of current page of the noticeboard in popup
+
+License: GPLv3
+
+Alert Sound: http://soundbible.com/1598-Electronic-Chime.html
+    (CC Attribution License)
