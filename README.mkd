@@ -17,3 +17,6 @@ Contributing: Bug Reports and Patches are most welcome
 Possible Improvements:
  - Allow for search in the notices
  - Make it generic for all intern notice boards
+
+Downloads:
+https://github.com/crodjer/tnp-notifier/downloads
