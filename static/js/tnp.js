@@ -27,8 +27,11 @@ function notifier(notice, notify){
     localStorage.setItem(notice['id'], JSON.stringify(notice));
 
     if (notify){
+        unseenNotices += 1;
+
         notification = window.webkitNotifications.createNotification(
-        'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
+            'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
+
         notification.show();
         document.getElementById("notification-sound").play();
 
@@ -36,6 +39,8 @@ function notifier(notice, notify){
         window.setTimeout(function(){
             notification.cancel();
         }, noticeDuration);
+
+        setNoticeCount();
     }
 }
 
@@ -100,11 +105,7 @@ function checkNotices(notifyFunction, displayFunction){
                         if(notifyFunction){
                             notifyFunction(notice, notify);
                         }
-
-                        unseenNotices += 1;
-                        setNoticeCount();
                     }
-
                     if (displayFunction){
                         displayFunction(notice);
                     }
