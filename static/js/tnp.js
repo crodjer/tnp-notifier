@@ -1,6 +1,6 @@
 /*
 *   tnp-notifier: Traning and Placements Notices, Chrome Notifier
-*   Copyright (C) 2011 crodjer
+*   Copyright (C) 2011 Rohan Jain
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
