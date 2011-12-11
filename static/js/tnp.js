@@ -32,6 +32,11 @@ function notifier(notice, notify){
         notification = window.webkitNotifications.createNotification(
             'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
 
+        notification.onclick = function(){
+            window.open(noticeBaseURL + notice.id.toString() ,'_newtab');
+            notification.cancel();
+        };
+
         notification.show();
         document.getElementById("notification-sound").play();
 

@@ -5,6 +5,7 @@ Provides:
 
  -  Update Notifications on new notices
  -  Count of unread notices
+ -  On click over a notification, close it and open up the notice page
  -  Display of current page of the noticeboard in popup
 
 License: GPLv3
