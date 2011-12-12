@@ -55,7 +55,7 @@ function notifier(notice, notify){
         };
 
         notification.show();
-        //document.getElementById("notification-sound").play();
+        document.getElementById("notification-sound").play();
 
         //Remove the notification after some time
         window.setTimeout(function(){
