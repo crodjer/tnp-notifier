@@ -20,21 +20,23 @@ var noticeBaseURL = 'http://tp.iitkgp.ernet.in/notice/notice.php?sr_no='
 var noticeDuration = 3500;
 
 function getNoticeCount(){
-    return Number(localStorage.getItem('unseenNotices'));
+    return localStorage.getItem('unseenNotices');
 }
 
-function setNoticeCount(){
+function showNoticeCount(){
     chrome.browserAction.setBadgeText({text:getNoticeCount()});
 }
 
 function incrementNoticeCount(){
-    unseenNotices = getNoticeCount();
+    unseenNotices = Number(getNoticeCount());
     unseenNotices += 1;
+    localStorage.setItem('unseenNotices', unseenNotices.toString());
+    showNoticeCount();
 }
 
 function clearNoticeCount(){
     localStorage.setItem('unseenNotices', '');
-    setNoticeCount();
+    showNoticeCount();
 }
 
 
@@ -45,7 +47,9 @@ function notifier(notice, notify){
     localStorage.setItem(notice['id'], JSON.stringify(notice));
 
     if (notify){
+        // Update and set the notices count
         incrementNoticeCount();
+
         var notification = window.webkitNotifications.createNotification(
             'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
 
@@ -54,13 +58,18 @@ function notifier(notice, notify){
             notification.cancel();
         };
 
-        notification.show();
-        document.getElementById("notification-sound").play();
+        notification.ondisplay = function(){
+            // Play the notification tune
+            document.getElementById("notification-sound").play();
 
-        //Remove the notification after some time
-        window.setTimeout(function(){
-            notification.cancel();
-        }, noticeDuration);
+            // Remove the notification after some time
+
+            setTimeout(function(){
+                notification.cancel();
+            }, noticeDuration);
+        }
+
+        notification.show();
     }
 }
 
