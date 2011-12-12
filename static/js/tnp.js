@@ -59,7 +59,6 @@ function notifier(notice, notify){
 
         //Remove the notification after some time
         window.setTimeout(function(){
-            console.log(notification);
             notification.cancel();
         }, noticeDuration);
     }
