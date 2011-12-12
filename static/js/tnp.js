@@ -46,7 +46,7 @@ function notifier(notice, notify){
 
     if (notify){
         incrementNoticeCount();
-        notification = window.webkitNotifications.createNotification(
+        var notification = window.webkitNotifications.createNotification(
             'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
 
         notification.onclick = function(){
@@ -55,10 +55,11 @@ function notifier(notice, notify){
         };
 
         notification.show();
-        document.getElementById("notification-sound").play();
+        //document.getElementById("notification-sound").play();
 
         //Remove the notification after some time
         window.setTimeout(function(){
+            console.log(notification);
             notification.cancel();
         }, noticeDuration);
     }
