@@ -48,7 +48,8 @@ function notifier(notices){
     */
 
     if (notices.length <= noticeOverFlowLimit ){
-        notices.forEach(function(){
+        $.each(notices, function(){
+            notice = this;
             var notification = window.webkitNotifications.createNotification(
                 'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
 
