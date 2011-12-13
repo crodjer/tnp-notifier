@@ -17,7 +17,9 @@
 */
 var noticBoardURL = 'http://tp.iitkgp.ernet.in/notice/';
 var noticeBaseURL = 'http://tp.iitkgp.ernet.in/notice/notice.php?sr_no='
-var noticeDuration = 3500;
+var noticeDuration = 4000;
+var noticeOverFlowLimit = 3;
+
 
 function getNoticeCount(){
     return localStorage.getItem('unseenNotices');
@@ -27,9 +29,9 @@ function showNoticeCount(){
     chrome.browserAction.setBadgeText({text:getNoticeCount()});
 }
 
-function incrementNoticeCount(){
+function incrementNoticeCount(count){
     unseenNotices = Number(getNoticeCount());
-    unseenNotices += 1;
+    unseenNotices += count;
     localStorage.setItem('unseenNotices', unseenNotices.toString());
     showNoticeCount();
 }
@@ -39,31 +41,57 @@ function clearNoticeCount(){
     showNoticeCount();
 }
 
-
-function notifier(notice, notify){
+function notifier(notices){
     /*
-    * Notifire for new notices.
+    * Notifire for new notices. It can be improved by writing in an object
+    * oriented way.
     */
-    localStorage.setItem(notice['id'], JSON.stringify(notice));
 
-    if (notify){
-        // Update and set the notices count
-        incrementNoticeCount();
+    if (notices.length <= noticeOverFlowLimit ){
+        notices.forEach(function(){
+            var notification = window.webkitNotifications.createNotification(
+                'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
 
+            // Update and set the notices count
+            incrementNoticeCount(1);
+
+            notification.onclick = function(){
+                window.open(noticeBaseURL + notice.id.toString() ,'_newtab');
+                notification.cancel();
+            };
+
+            notification.ondisplay = function(){
+                // Play the notification tune
+                document.getElementById("notification-sound").play();
+
+                // Remove the notification after some time
+                setTimeout(function(){
+                    notification.cancel();
+                }, noticeDuration);
+            }
+
+            notification.show();
+        });
+    }
+
+    // To many new notices. Don't display them all, just notify the count.
+    else{
         var notification = window.webkitNotifications.createNotification(
-            'static/img/icon.jpg', 'T&P Update: ' + notice['time'], notice['title']);
+            'static/img/icon.jpg', 'T&P Update', notices.length + ' new notices');
+
+        // Update and set the notices count
+        incrementNoticeCount(notices.length);
 
         notification.onclick = function(){
-            window.open(noticeBaseURL + notice.id.toString() ,'_newtab');
-            notification.cancel();
-        };
+                window.open(noticBoardURL,'_newtab');
+                notification.cancel();
+            };
 
         notification.ondisplay = function(){
             // Play the notification tune
             document.getElementById("notification-sound").play();
 
             // Remove the notification after some time
-
             setTimeout(function(){
                 notification.cancel();
             }, noticeDuration);
@@ -93,6 +121,7 @@ function checkNotices(notifyFunction, displayFunction){
     $.ajax({
         url: noticBoardURL,
         success: function(data){
+            var notices = [];
             var lastID = 0;
             $("table tr", data).each(function(){
                 cells = $("td", this);
@@ -122,15 +151,19 @@ function checkNotices(notifyFunction, displayFunction){
                             'attachment': $.trim(attachElem.innerHTML.replace(/&nbsp;/gi, '')) ? true:false
                         }
 
-                        if(notifyFunction){
-                            notifyFunction(notice, notify);
-                        }
+                        localStorage.setItem(id, JSON.stringify(notice));
+                        notices.push(notice);
                     }
+
                     if (displayFunction){
                         displayFunction(notice);
                     }
                 }
             });
+
+            if(notices.length > 0 && notifyFunction && notify){
+                notifyFunction(notices);
+            }
         }
     });
 }
