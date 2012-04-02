@@ -21,4 +21,4 @@ Possible Improvements:
  - Make it generic for all internal notice boards
 
 Downloads:
-https://github.com/crodjer/tnp-notifier/downloads
+https://github.com/crodjer/tnp-notifier/downloads#uploaded_downloads
