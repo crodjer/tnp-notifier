@@ -20,5 +20,6 @@ Possible Improvements:
  - Allow for search in the notices
  - Make it generic for all internal notice boards
 
-Downloads:
+Download:
+https://github.com/downloads/crodjer/tnp-notifier/tnp.crx
 https://github.com/crodjer/tnp-notifier/downloads#uploaded_downloads
